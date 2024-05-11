@@ -110,6 +110,20 @@ function createGameController(
     return null;
   }
 
+  const checkForDraw = () => {
+    const boardState = board.getBoard();
+
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (boardState[i][j] === "") {
+          return false;
+        }
+      }
+    }
+    
+    return true;
+  }
+
   const playRound = (row, column) => {
     console.log(`Dropping ${getActivePlayer().name}'s marker into row ${row} and column ${column}`);
     board.placeMarker(row, column, getActivePlayer().marker);
@@ -119,7 +133,13 @@ function createGameController(
     */
     const winner = checkForWinner();
     if (winner) {
-      console.log(`The winner is ${winner.name}'s `);
+      console.log(`The winner is ${winner.name}'s`);
+      return;
+    } 
+    
+    const draw = checkForDraw();
+    if (draw) {
+      console.log("It's draw");
       return;
     }
 
@@ -130,6 +150,7 @@ function createGameController(
   printNewRound();
 
   return {
+    printNewRound,
     playRound,
     getActivePlayer
   };
